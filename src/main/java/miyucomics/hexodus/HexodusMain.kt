@@ -1,17 +1,20 @@
 package miyucomics.hexodus
 
+import at.petrak.hexcasting.api.HexAPI
 import gravity_changer.GravityComponent
 import net.fabricmc.api.ModInitializer
-import net.minecraft.client.item.ModelPredicateProviderRegistry
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
 import net.minecraft.util.Identifier
 
 class HexodusMain : ModInitializer {
 	override fun onInitialize() {
 		HexodusActions.init()
 		Registry.register(Registries.ITEM, id("ballast"), BALLAST_ITEM)
+		ItemGroupEvents.modifyEntriesEvent(RegistryKey.of(Registries.ITEM_GROUP.key, HexAPI.modLoc("hexcasting"))).register { group -> group.add(BALLAST_ITEM) }
 
 		GravityComponent.GRAVITY_UPDATE_EVENT.register { entity, component ->
 			HexodusComponents.HEXODUS.get(entity).alterGravity(component)
